@@ -1,23 +1,19 @@
 const { default: mongoose, Schema } = require("mongoose");
 
-const userSchema = new Schema({
-  Title: {
-    type: String,
-  },
-  description: {
+const userSchema1 = new Schema({
+  uuid: {
     type: String,
   },
   File: {
     type: String,
   },
   postdate: {
-
     type: Date,
     default: Date.now,
   },
-  Aurthor: {
+  _ide:{
     type: String,
-  },
+  }
 });
-const userModel = mongoose.model("user", userSchema);
-module.exports = userModel;
+const userimg = mongoose.model("imgs", userSchema1);
+module.exports = userimg;

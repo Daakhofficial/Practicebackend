@@ -1,37 +1,49 @@
-const fastify = require("fastify")({
-  logger: true,
-});
-const cors = require("@fastify/cors");
+const fastify = require("fastify")();
+const path = require("node:path");
+const cor = require("@fastify/cors");
+const multer = require("multer");
 require("dotenv").config();
-const mongoose = require("mongoose");
-fastify.register(cors, {
-  origin: "*",
-  methods: ["GET", "POST"],
-});
+const { default: mongoose } = require("mongoose");
+fastify.register(cor, { origin: "*", methods: "GET,POST,PUT,DELETE" });
+const fastifyMultipart = require("@fastify/multipart");
 
-
-
-
-
-
+// Register the multipart plugin
+fastify.register(fastifyMultipart);
 fastify.register(require("@fastify/formbody"));
-const PORT = process.env.PORT;
+
+const PORT = process.env.PORT || 4000;
 const HOST = process.env.HOST;
-const homerouter = require("./routes/homeRoutes");
-fastify.register(homerouter, { prefix: "/api/v1" });
 
 const auth = require("./controllers/auTh");
-fastify.addHook("preHandler", auth);
-mongoose
-  .connect(process.env.MONGODB_URL, {})
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-  });
+const homeRoutes = require("./routes/homeRoutes");
 
-fastify.listen({ port: 4000, host: HOST }, (err, address) => {
+fastify.register(homeRoutes, { prefix: "/api/v1" });
+
+fastify.addHook("preHandler", auth);
+
+mongoose
+  .connect(process.env.MONGODB_URL)
+
+  .then(() => console.log("MongoDB connected"));
+
+fastify.get("/blogrecive", function (req, reply) {
+  reply.code(200).send("Api V1 Working");
+});
+
+// fastify.post("/verifyotp", function (req, res) {
+// res.code(200).send("Api V1 Working")
+// })
+// fastify.post("/sendotp", function (req, res) {
+// res.code(200).send("Api V1 Working")
+// })
+// fastify.get("/getblog", function (req, reply) {
+// reply.code(200).send("Api V1 Working")
+// })
+
+// const PORT = process.env.PORT || 4000;
+// const HOST = process.env.HOST || '127.0.0.1';
+
+fastify.listen({ port: PORT, host: HOST }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
