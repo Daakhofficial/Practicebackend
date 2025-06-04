@@ -94,11 +94,20 @@ async function sendId(req, reply) {
   }
 }
 
+
+
+async function admifinder(req,reply) {
+  const {gituser} = req.body;
+  console.log(gituser)
+  // const adFinder = userModel.find({gituser})
+}
+
 module.exports = {
   blogrecive,
   Adminpost,
   uploadProfileImage,
   sendId,
+  admifinder,
   // imageuploads,
   // upload
 };

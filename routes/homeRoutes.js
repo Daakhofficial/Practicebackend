@@ -6,6 +6,7 @@ async function routes(fastify, options) {
   fastify.post("/Adminpost", homeCrontroller.Adminpost);
   fastify.post("/uploadProfileImage", homeCrontroller.uploadProfileImage);
   fastify.post("/sendId:_id", homeCrontroller.sendId);
+  fastify.post("/admifinder", homeCrontroller.admifinder);
 }
 
 module.exports = routes;
