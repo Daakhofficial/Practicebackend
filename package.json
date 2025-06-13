@@ -23,6 +23,7 @@
         "fastify-multer": "^2.0.3",
         "mongoose": "^8.13.2",
         "multer": "^2.0.0",
+        "nodemailer": "^7.0.3",
         "uuid": "^11.1.0"
     },
     "devDependencies": {

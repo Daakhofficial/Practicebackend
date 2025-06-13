@@ -36,9 +36,9 @@ fastify.get("/blogrecive", function (req, reply) {
 // fastify.post("/sendotp", function (req, res) {
 // res.code(200).send("Api V1 Working")
 // })
-// fastify.get("/getblog", function (req, reply) {
-// reply.code(200).send("Api V1 Working")
-// })
+fastify.get("/homeCrontroller", function (req, reply) {
+reply.code(200).send("Api V1 Working")
+})
 
 // const PORT = process.env.PORT || 4000;
 // const HOST = process.env.HOST || '127.0.0.1';

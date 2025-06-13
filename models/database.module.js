@@ -11,13 +11,14 @@ const userSchema = new Schema({
     type: String,
   },
   postdate: {
-
     type: Date,
     default: Date.now,
   },
   Aurthor: {
     type: String,
   },
+  views: { type: Number, default: 0 },
+  viewedIPs: [String],
 });
 const userModel = mongoose.model("user", userSchema);
 module.exports = userModel;

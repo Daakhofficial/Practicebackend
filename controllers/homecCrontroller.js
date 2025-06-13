@@ -1,4 +1,5 @@
 const userModel = require("../models/database.module");
+const subsemail = require("../models/subscribe.module");
 const userimg = require("../models/imageupload.mpodule");
 const { default: mongoose } = require("mongoose");
 const multer = require("multer");
@@ -6,6 +7,15 @@ const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 uuidv4();
 const rdid = uuidv4();
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "daakhofficial@gmail.com",
+    pass: "rqvv rcko gnhy ccoe",
+  },
+});
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
@@ -23,7 +33,7 @@ async function blogrecive(req, reply) {
   const recive = await userModel.find({});
   if (recive) {
     reply.code(200).send(recive);
-    console.log("hii");
+    // console.log("hii");
   }
 }
 async function Adminpost(req, reply) {
@@ -39,7 +49,7 @@ async function Adminpost(req, reply) {
   });
   await senddata.save();
   reply.code(200).send("hii");
-  console.log("blog saved")
+  console.log("blog saved");
 }
 
 async function uploadProfileImage(req, reply) {
@@ -83,23 +93,81 @@ async function uploadProfileImage(req, reply) {
 async function sendId(req, reply) {
   try {
     const { _id } = req.params;
-    console.log(_id);
+    // console.log(_id);
 
     const sendid = await userModel.find({ _id: _id }); // Await the result
 
     reply.code(200).send({ sendid }); // This is now JSON-serializable
   } catch (err) {
     console.error(err);
-    reply.code(500).send({ error: 'Internal Server Error' });
+    reply.code(500).send({ error: "Internal Server Error" });
+  }
+}
+async function subscribe(req, reply) {
+  try {
+    const { email } = req.body;
+    // console.log(_id);
+
+    const sendsub = await new subsemail({ email: email }); // Await the result
+    await sendsub.save();
+    await transporter.sendMail({
+      from: "daakhofficial@gmail.com",
+      to: email,
+      subject: "Feedback",
+      text: "Thanks For Give Feedback",
+    });
+    // reply.code(200).send("hii");
+    // if (sendsub.status === 200) {
+    //   console.log(hi);
+    //   const mailOptions = {
+    //     from: "rakaboos534@gmail.com",
+    //     to: {email},
+    //     subject: "Sending Email using Node.js",
+    //     text: "That was easy!",
+    //   };
+    //   transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //       console.log(error);
+    //     } else {
+    //       console.log("Email sent: " + info.response);
+    //     }
+    //   });
+    // }
+  } catch (err) {
+    console.error(err);
+    reply.code(500).send({ error: "Internal Server Error" });
   }
 }
 
-
-
-async function admifinder(req,reply) {
-  const {gituser} = req.body;
-  console.log(gituser)
+async function admifinder(req, reply) {
+  const { gituser } = req.body;
+  console.log(gituser);
   // const adFinder = userModel.find({gituser})
+}
+async function postview(req, reply) {
+  const getUserIP = (req) => {
+    return (
+      req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress
+    );
+  };
+  // console.log("User IP:", getUserIP(req));
+  try {
+    const ip = getUserIP(req);
+    const post = await userModel.findById(req.params._id);
+
+    if (!post) return reply.status(404).send({ message: "Post not found" });
+
+    // If IP not already in list, add and increment view
+    if (!post.viewedIPs.includes(ip)) {
+      post.views += 1;
+      post.viewedIPs.push(ip);
+      await post.save();
+    }
+
+    reply.send({ views: post.views });
+  } catch (err) {
+    reply.status(500).send({ error: err.message });
+  }
 }
 
 module.exports = {
@@ -108,6 +176,8 @@ module.exports = {
   uploadProfileImage,
   sendId,
   admifinder,
+  postview,
+  subscribe,
   // imageuploads,
   // upload
 };
