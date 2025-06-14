@@ -1,6 +1,7 @@
 const userModel = require("../models/database.module");
 const subsemail = require("../models/subscribe.module");
 const userimg = require("../models/imageupload.mpodule");
+const qullpost = require("../models/Quill.module");
 const { default: mongoose } = require("mongoose");
 const multer = require("multer");
 const path = require("path");
@@ -49,7 +50,7 @@ async function Adminpost(req, reply) {
   });
   await senddata.save();
   reply.code(200).send("hii");
-  console.log("blog saved");
+  // console.log("blog saved");
 }
 
 async function uploadProfileImage(req, reply) {
@@ -95,7 +96,7 @@ async function sendId(req, reply) {
     const { _id } = req.params;
     // console.log(_id);
 
-    const sendid = await userModel.find({ _id: _id }); // Await the result
+    const sendid = await qullpost.find({ _id: _id }); // Await the result
 
     reply.code(200).send({ sendid }); // This is now JSON-serializable
   } catch (err) {
@@ -116,23 +117,6 @@ async function subscribe(req, reply) {
       subject: "Feedback",
       text: "Thanks For Give Feedback",
     });
-    // reply.code(200).send("hii");
-    // if (sendsub.status === 200) {
-    //   console.log(hi);
-    //   const mailOptions = {
-    //     from: "rakaboos534@gmail.com",
-    //     to: {email},
-    //     subject: "Sending Email using Node.js",
-    //     text: "That was easy!",
-    //   };
-    //   transporter.sendMail(mailOptions, function (error, info) {
-    //     if (error) {
-    //       console.log(error);
-    //     } else {
-    //       console.log("Email sent: " + info.response);
-    //     }
-    //   });
-    // }
   } catch (err) {
     console.error(err);
     reply.code(500).send({ error: "Internal Server Error" });
@@ -141,7 +125,7 @@ async function subscribe(req, reply) {
 
 async function admifinder(req, reply) {
   const { gituser } = req.body;
-  console.log(gituser);
+  // console.log(gituser);
   // const adFinder = userModel.find({gituser})
 }
 async function postview(req, reply) {
@@ -153,7 +137,7 @@ async function postview(req, reply) {
   // console.log("User IP:", getUserIP(req));
   try {
     const ip = getUserIP(req);
-    const post = await userModel.findById(req.params._id);
+    const post = await qullpost.findById(req.params._id);
 
     if (!post) return reply.status(404).send({ message: "Post not found" });
 
@@ -169,6 +153,21 @@ async function postview(req, reply) {
     reply.status(500).send({ error: err.message });
   }
 }
+async function blogpost(req, reply) {
+  const { title, content,email  } = req.body;
+  // console.log(title)
+  try {
+    const newPost = new qullpost({ title, content,aurthor:email });
+    await newPost.save();
+    reply.code(201).send({ message: 'Post saved successfully' });
+  } catch (err) {
+    reply.code(500).send({ error: 'Failed to save post' });
+  }
+}
+async function blogpostview(req, reply) {
+  const posts = await qullpost.find().sort({ createdAt: -1 });
+  reply.send(posts);
+}
 
 module.exports = {
   blogrecive,
@@ -178,6 +177,8 @@ module.exports = {
   admifinder,
   postview,
   subscribe,
+  blogpost,
+  blogpostview,
   // imageuploads,
   // upload
 };

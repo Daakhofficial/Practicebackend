@@ -1,24 +1,10 @@
 const { default: mongoose, Schema } = require("mongoose");
 
 const userSchema = new Schema({
-  Title: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
-  File: {
-    type: String,
-  },
-  postdate: {
-    type: Date,
-    default: Date.now,
-  },
-  Aurthor: {
-    type: String,
-  },
-  views: { type: Number, default: 0 },
-  viewedIPs: [String],
+  email: { type: String, required: true, unique: true },
+  verified: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
+
 });
 const userModel = mongoose.model("user", userSchema);
 module.exports = userModel;
