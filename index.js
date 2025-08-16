@@ -11,13 +11,15 @@ const fastifyMultipart = require("@fastify/multipart");
 fastify.register(fastifyMultipart);
 fastify.register(require("@fastify/formbody"));
 
-const PORT = process.env.PORT || 4000;
+const PORT = "4000";
 const HOST = process.env.HOST;
 
 const auth = require("./controllers/auTh");
 const homeRoutes = require("./routes/homeRoutes");
 
+
 fastify.register(homeRoutes, { prefix: "/api/v1" });
+
 
 fastify.addHook("preHandler", auth);
 
