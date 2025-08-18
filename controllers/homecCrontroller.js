@@ -101,7 +101,7 @@ async function sendId(req, reply) {
     const { _id } = req.params;
     // console.log(_id);
 
-    const sendid = await qullpost.find({ _id: _id }); // Await the result
+    const sendid = await qullpost.find({ _id: _id }).select("_id title content createdAt cetagory aurthor views"); // Await the result
 
     reply.code(200).send({ sendid }); // This is now JSON-serializable
   } catch (err) {
@@ -110,19 +110,19 @@ async function sendId(req, reply) {
   }
 }
 async function blogs(req, reply) {
-  const posts = await qullpost.find().sort({ createdAt: -1 });
+  const posts = await qullpost.find().select("_id title content createdAt cetagory aurthor views").sort({ createdAt: -1 });
   reply.send(posts);
 }
 async function crousal(req, reply) {
-  const posts = await qullpost.find({crousal:"1"}).sort({ createdAt: -1 });
+  const posts = await qullpost.find({crousal:"1"}).select("_id title content createdAt cetagory aurthor views").sort({ createdAt: -1 });
   reply.send(posts);
 }
 async function techpage(req, reply) {
-  const posts = await qullpost.find({cetagory:"Technology"}).sort({ createdAt: -1 });
+  const posts = await qullpost.find({cetagory:"Technology"}).select("_id title content createdAt cetagory aurthor views").sort({ createdAt: -1 });
   reply.send(posts);
 }
 async function Healthpage(req, reply) {
-  const posts = await qullpost.find({cetagory:"Health"}).sort({ createdAt: -1 });
+  const posts = await qullpost.find({cetagory:"Health"}).select("_id title content createdAt cetagory aurthor views").sort({ createdAt: -1 });
   reply.send(posts);
 }
 async function subscribe(req, reply) {
@@ -191,7 +191,7 @@ async function blogpostview(req, reply) {
 }
 async function autotag(req, res) {
   try {
-    const posts = await qullpost.find({}, { title: 1, content: 1 }).lean();
+    const posts = await qullpost.find({}, { title: 1}).lean();
 
     if (!posts.length) {
       return res.json({ tags: [] });

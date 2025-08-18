@@ -28,6 +28,9 @@ async function routes(fastify, options) {
   fastify.post("/verify-login-otp", useraccescrontroller.verifyloginotp);
   fastify.post("/verify-otp", useraccescrontroller.verifysign);
   fastify.post("/authenticate",useraccescrontroller.authverification);
+  fastify.post("/userdashboard",accesauth.userdashboard);
+  fastify.post("/userpost",accesauth.userpost);
+  fastify.delete("/deletepost/:postId",accesauth.deltelpost);
   // fastify.get("/UserpostViews/:_id", homeCrontroller.UserpostViews);
 }
 
