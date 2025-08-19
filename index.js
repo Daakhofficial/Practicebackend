@@ -43,10 +43,11 @@ reply.code(200).send("Api V1 Working")
 })
 
 
-fastify.listen({ port: PORT, host: '0.0.0.0' }, (err, address) => {
-  if (err) {
+fastify.listen({ port: PORT, host: '0.0.0.0' })
+  .then(address => {
+    console.log("✅ Server listening at:", address.replace('127.0.0.1', '0.0.0.0'));
+  })
+  .catch(err => {
     console.error(err);
     process.exit(1);
-  }
-  console.log("server listening on " + address);
-});
+  });
