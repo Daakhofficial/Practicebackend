@@ -42,8 +42,6 @@ fastify.get("/homeCrontroller", function (req, reply) {
 reply.code(200).send("Api V1 Working")
 })
 
-// const PORT = process.env.PORT || 4000;
-// const HOST = process.env.HOST || '127.0.0.1';
 
 fastify.listen({ port: PORT, host: HOST }, (err, address) => {
   if (err) {
