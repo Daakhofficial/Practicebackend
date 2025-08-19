@@ -43,7 +43,7 @@ reply.code(200).send("Api V1 Working")
 })
 
 
-fastify.listen({ port: PORT, "0.0.0.0" }, (err, address) => {
+fastify.listen({ port: PORT, host: '0.0.0.0' }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
