@@ -2,6 +2,7 @@ const fastify = require("fastify")({ logger: true });
 const homeCrontroller = require("../controllers/homecCrontroller");
 const useraccescrontroller = require("../controllers/useraccesCrontroller");
 const accesauth = require("../accesauth/accesAuth");
+const earningroute = require("../controllers/earnigAcces/earnigAcces")
 
 async function routes(fastify, options) {
   fastify.get("/blogrecive", homeCrontroller.blogrecive);
@@ -31,6 +32,10 @@ async function routes(fastify, options) {
   fastify.post("/userdashboard",accesauth.userdashboard);
   fastify.post("/userpost",accesauth.userpost);
   fastify.delete("/deletepost/:postId",accesauth.deltelpost);
+  fastify.post("/forgot-password",accesauth.forgotpassword);
+  fastify.post("/reset-password",accesauth.resetpassword);
+  fastify.post("/views-count",accesauth.viewscounter);
+  fastify.post("/your-earning",earningroute.sendmoney);
   // fastify.get("/UserpostViews/:_id", homeCrontroller.UserpostViews);
 }
 
