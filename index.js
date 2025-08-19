@@ -12,7 +12,7 @@ fastify.register(fastifyMultipart);
 fastify.register(require("@fastify/formbody"));
 
 const PORT = "4000";
-const HOST = process.env.HOST;
+const HOST = "0.0.0.0";
 
 const auth = require("./controllers/auTh");
 const homeRoutes = require("./routes/homeRoutes");
