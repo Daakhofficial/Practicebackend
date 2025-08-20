@@ -4,7 +4,7 @@ const cor = require("@fastify/cors");
 const multer = require("multer");
 require("dotenv").config();
 const { default: mongoose } = require("mongoose");
-fastify.register(cor, { origin: "*", methods: "GET,POST,PUT,DELETE" });
+fastify.register(cor, { origin: "https://rajbongshi-times.vercel.app", methods: "GET,POST,PUT,DELETE" });
 const fastifyMultipart = require("@fastify/multipart");
 
 // Register the multipart plugin
