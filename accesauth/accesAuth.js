@@ -117,7 +117,7 @@ async function viewscounter(req, res) {
     // console.log(email)
 
     // Find all posts for this email
-    const userPosts = await posts.find({aurthor:email}).select("views");
+    const userPosts = await posts.find({ aurthor: email }).select("views");
     // console.log(userPosts)
 
     // Count how many posts
@@ -133,6 +133,34 @@ async function viewscounter(req, res) {
     });
 
 }
+async function checkusername(req, res) {
+    try {
+        const { username } = req.body;
+
+        if (!username) {
+            return res.status(400).json({
+                message: 'Username is required',
+                exists: true
+            });
+        }
+
+        // Check if username exists in database
+        const existingUser = await userModel.findOne({ username: username.toLowerCase() });
+
+        // Return response
+        res.send({
+            exists: !!existingUser,
+            message: existingUser ? 'Username is taken' : 'Username is available'
+        });
+
+    } catch (error) {
+        console.error('Error checking username:', error);
+        res.status(500).send({
+            message: 'Internal server error',
+            exists: true
+        });
+    }
+}
 module.exports = {
     authverification,
     userdashboard,
@@ -141,4 +169,5 @@ module.exports = {
     forgotpassword,
     resetpassword,
     viewscounter,
+    checkusername,
 }

@@ -36,6 +36,7 @@ async function routes(fastify, options) {
   fastify.post("/reset-password",accesauth.resetpassword);
   fastify.post("/views-count",accesauth.viewscounter);
   fastify.post("/your-earning",earningroute.sendmoney);
+  fastify.post("/check-username",accesauth.checkusername);
   // fastify.get("/UserpostViews/:_id", homeCrontroller.UserpostViews);
 }
 

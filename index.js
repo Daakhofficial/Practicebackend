@@ -4,7 +4,7 @@ const cor = require("@fastify/cors");
 const multer = require("multer");
 require("dotenv").config();
 const { default: mongoose } = require("mongoose");
-fastify.register(cor, { origin: "https://rajbongshi-times.vercel.app", methods: "GET,POST,PUT,DELETE" });
+fastify.register(cor, { origin: "*", methods: "GET,POST,PUT,DELETE" });
 const fastifyMultipart = require("@fastify/multipart");
 
 // Register the multipart plugin
@@ -12,7 +12,7 @@ fastify.register(fastifyMultipart);
 fastify.register(require("@fastify/formbody"));
 
 const PORT = "4000";
-const HOST = "0.0.0.0";
+const HOST = "127.0.0.1";
 
 const auth = require("./controllers/auTh");
 const homeRoutes = require("./routes/homeRoutes");
@@ -43,9 +43,9 @@ reply.code(200).send("Api V1 Working")
 })
 
 
-fastify.listen({ port: PORT, host: '0.0.0.0' })
+fastify.listen({ port: PORT, host: HOST })
   .then(address => {
-    console.log("✅ Server listening at:", address.replace('127.0.0.1', '0.0.0.0'));
+    console.log("✅ Server listening at:" + address)
   })
   .catch(err => {
     console.error(err);
