@@ -41,16 +41,23 @@ async function userdashboard(req, reply) {
     }
 }
 async function userpost(req, reply) {
-    const { email } = req.body;
-    const userPosts = await posts.find({ aurthor: email }).select("_id title content createdAt cetagory aurthor views");
-    const { _id, title } = userPosts[0];
-    if (!_id) {
-        return reply.code(404).send({ message: "User not found" });
+    try {
+        const { email } = req.body;
+        
+        if (!email) {
+            return reply.code(400).send({ message: "Email is required" });
+        }
+
+        const userPosts = await posts.find({ aurthor: email }).select("_id title content createdAt cetagory aurthor views");
+
+        if (!userPosts || userPosts.length === 0) {
+            return reply.code(404).send({ message: "No posts found for this user" });
+        }
+
+        reply.send(userPosts);
+    } catch (error) {
+        reply.code(500).send({ message: "Error fetching posts", error: error.message });
     }
-    if (!userPosts) {
-        return reply.code(404).send({ message: "No posts found for this user" });
-    }
-    reply.send(userPosts);
 }
 async function deltelpost(req, reply) {
     const { postId } = req.params;
